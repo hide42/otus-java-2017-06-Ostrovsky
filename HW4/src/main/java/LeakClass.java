@@ -1,8 +1,6 @@
 import java.util.ArrayList;
 
-/**
- **  -Xms256m -Xmx256m -XX:+UseParallelGC -XX:+UseParallelOldGC
- */
+
 public class LeakClass {
     private int ADD_ELEMENTS = 20_000;
     private ArrayList<String> array;
