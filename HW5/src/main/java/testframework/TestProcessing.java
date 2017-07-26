@@ -26,7 +26,7 @@ public class TestProcessing {
     }
 
     public static void testPackage(String testPackage) throws IOException, IllegalAccessException, InvocationTargetException, InstantiationException {
-        System.out.println("TEST PACKAGE"+"\n");
+        System.out.println("TEST PACKAGE");
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
         ClassPath classPath = ClassPath.from(classLoader);
         for (int i=0;i<classPath.getTopLevelClasses(testPackage).asList().size();i++)
@@ -34,14 +34,14 @@ public class TestProcessing {
     }
 
     public static void testClassList(Class ...classes) throws IllegalAccessException, InvocationTargetException, InstantiationException {
-        System.out.println("TEST CLASSES"+"\n");
+        System.out.println("TEST CLASSES");
         for (Class oneClass : classes){
             testClass(oneClass);
         }
     }
 
     public static void testClass(Class testableClass) throws IllegalAccessException, InstantiationException, InvocationTargetException {
-        System.out.println("TEST CLASS "+testableClass.getSimpleName()+"\n");
+        System.out.println("TEST CLASS "+testableClass.getSimpleName());
         initMethods(testableClass);
 
         if(!testableMethods.isEmpty())
@@ -67,9 +67,9 @@ public class TestProcessing {
         }
     }
     private static void runTests(Class testableClass) throws IllegalAccessException, InstantiationException, InvocationTargetException {
-        final Object instanceOfClass = testableClass.newInstance();
 
         for(Method method : testableMethods){
+            final Object instanceOfClass = testableClass.newInstance();
 
             for(Method before : beforeTestableMethods)
                 before.invoke(instanceOfClass);
