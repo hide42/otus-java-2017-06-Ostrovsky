@@ -13,15 +13,17 @@ or
 
 public class Main {
     public static void main(String[] args) {
-        new LoggerGC();
+        LoggerGC loggerGC = new LoggerGC();
+        loggerGC.start();
         LeakClass leakClass=new LeakClass();
-
 
         try{
             while (true){
             leakClass.start();
             Thread.sleep(500);}
         }catch (Exception e){e.printStackTrace();}
+
+
 
 
     }

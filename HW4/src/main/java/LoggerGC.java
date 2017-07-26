@@ -26,7 +26,7 @@ public class LoggerGC extends Thread {
             namesGC[i]=beansGCMX.get(i).getName();
         }
         this.setDaemon(true);
-        this.start();
+
     }
 
     @SuppressWarnings("InfiniteLoopStatement")

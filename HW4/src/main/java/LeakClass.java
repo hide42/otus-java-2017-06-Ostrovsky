@@ -1,22 +1,20 @@
-import java.util.ArrayList;
-
 
 public class LeakClass {
-    private int ADD_ELEMENTS = 20_000;
-    private ArrayList<String> array;
+    private int ADD_ELEMENTS = 11_000;
+    private LinkedList<String> linkedList;
 
-    LeakClass(){array=new ArrayList<>();}
+    LeakClass(){linkedList=new LinkedList<>();}
 
     void start(){
         for (int i = 0; i < ADD_ELEMENTS; i++) {
-            array.add(Integer.toString(i+array.size()*2));
+            linkedList.add(Integer.toString(i+ADD_ELEMENTS*2));
         }
 
         for (int i = 0; i < ADD_ELEMENTS / 2; i++) {
-            if (array.size()==0) {
+            if (linkedList.firstNode==null) {
                 break;
             }
-            array.remove(array.size()-1);
+            linkedList.poll();
         }
 
     }
