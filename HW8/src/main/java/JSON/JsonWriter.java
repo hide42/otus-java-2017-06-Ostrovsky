@@ -28,9 +28,7 @@ public class JsonWriter {
                 Collection collection = (Collection) field.get(object);
                 jsonObject.put(field.getName() , arrayToJson(collection.toArray()));
             } else {
-                if(!Number.class.isInstance(field.get(object))
-                        &&!String.class.isInstance(field.get(object))
-                        &&!Boolean.class.isInstance(field.get(object))){
+                if(!isInstance(field.get(object))){
 
                     jsonObject.put( field.getName(), toJson(field.get(object))) ;
                 }else{
@@ -40,7 +38,6 @@ public class JsonWriter {
 
         return jsonObject;
     }
-
     private JSONArray arrayToJson(Object array) throws IllegalAccessException{
 
         JSONArray jsonArray = new JSONArray();
@@ -50,14 +47,17 @@ public class JsonWriter {
             if(elementOfArray.getClass().isArray()){
                 jsonArray.add(arrayToJson(elementOfArray));
             }else {
-                if(Number.class.isInstance(elementOfArray)
-                        ||String.class.isInstance(elementOfArray)
-                        ||Boolean.class.isInstance(elementOfArray))
+                if(isInstance(elementOfArray))
                     jsonArray.add(elementOfArray);
                 else
                     jsonArray.add(toJson(elementOfArray));
                 }
         }
         return jsonArray;
+    }
+    private boolean isInstance(Object object){
+        return (Number.class.isInstance(object)
+                ||String.class.isInstance(object)
+                ||Boolean.class.isInstance(object));
     }
 }
