@@ -1,5 +1,6 @@
 package JSON;
 
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -27,7 +28,10 @@ public class JsonWriter {
                 Collection collection = (Collection) field.get(object);
                 jsonObject.put(field.getName() , arrayToJson(collection.toArray()));
             } else {
-                if(!Number.class.isInstance(field.get(object))&&!String.class.isInstance(field.get(object))){
+                if(!Number.class.isInstance(field.get(object))
+                        &&!String.class.isInstance(field.get(object))
+                        &&!Boolean.class.isInstance(field.get(object))){
+
                     jsonObject.put( field.getName(), toJson(field.get(object))) ;
                 }else{
                 jsonObject.put( field.getName(), field.get(object) ) ;}
@@ -46,7 +50,9 @@ public class JsonWriter {
             if(elementOfArray.getClass().isArray()){
                 jsonArray.add(arrayToJson(elementOfArray));
             }else {
-                if(Number.class.isInstance(elementOfArray)||String.class.isInstance(elementOfArray))
+                if(Number.class.isInstance(elementOfArray)
+                        ||String.class.isInstance(elementOfArray)
+                        ||Boolean.class.isInstance(elementOfArray))
                     jsonArray.add(elementOfArray);
                 else
                     jsonArray.add(toJson(elementOfArray));

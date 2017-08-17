@@ -1,6 +1,7 @@
 package TestClasses;
 
 public class Cat {
+    boolean isAlive=true;
     String name;
     double age;
     Breed breed;
