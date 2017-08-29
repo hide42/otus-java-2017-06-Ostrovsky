@@ -3,6 +3,7 @@ package orm;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 
@@ -31,7 +32,7 @@ public class MapORM {
     }
 
     public List<String> getStringFields(){
-        List<String> fieldsName = new ArrayList<>();
+        List<String> fieldsName = new LinkedList<>();
         for(Field field:fields){
             fieldsName.add(field.getName());
         }
