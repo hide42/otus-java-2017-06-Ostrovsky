@@ -1,14 +1,16 @@
 package orm;
 
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
 
 public class MapORM {
 
-    private List<String> fields;
+    private List<Field> fields;
     private String tableName;
+
 
     public MapORM() {
         this.fields = new ArrayList<>();
@@ -17,16 +19,26 @@ public class MapORM {
     public String getTableName() {
         return tableName;
     }
-    public void addField(String field){
-        fields.add(field);
+    public void addField(Field field){
+        if(!fields.contains(field))
+            fields.add(field);
+        else
+            System.err.println("Conflict fields");
     }
 
     public void setTableName(String tableName) {
         this.tableName = tableName;
     }
 
+    public List<String> getStringFields(){
+        List<String> fieldsName = new ArrayList<>();
+        for(Field field:fields){
+            fieldsName.add(field.getName());
+        }
+        return fieldsName;
+    }
 
-    public List<String> getFields() {
+    public List<Field> getFields() {
         return fields;
     }
 }

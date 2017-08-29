@@ -29,7 +29,8 @@ public class QueryHelper {
         List<String> values = new LinkedList<>();
         List<String> results = new LinkedList<>();
 
-        for(String fieldName : map.getFields()){
+        for(Field field : map.getFields()){
+            String fieldName = field.getName();
             Object value=getFieldValue(object,fieldName);
             columns.add(fieldName);
             if(value instanceof Character||value instanceof String){
@@ -43,7 +44,6 @@ public class QueryHelper {
         String column = String.join(",",columns);
         String value = String.join(",",values);
         String result = String.join(",",results);
-
         return String.format("INSERT INTO %s (%s) VALUES (%s)  ON DUPLICATE KEY UPDATE %s", map.getTableName(), column, value, result);
     }
 
@@ -73,26 +73,33 @@ public class QueryHelper {
 
     public static <T> String getSelect(Class<T> clazz, int id) {
         MapORM map = getMappingORM(clazz);
-        String fields = String.join(",",map.getFields());
+        String fields = String.join(",",map.getStringFields());
         return String.format("SELECT %s FROM %s WHERE id = %s", fields, map.getTableName(), id);
     }
 
     public static MapORM getMappingORM(Class<?> clazz){
-        Table tableAnnotations = clazz.getDeclaredAnnotation(Table.class);
         MapORM map = new MapORM();
-        map.setTableName(tableAnnotations.name());
+
+        if(clazz.isAnnotationPresent(Table.class)){
+        Table tableAnnotations = clazz.getDeclaredAnnotation(Table.class);
+            map.setTableName(tableAnnotations.name());
+        }else {
+            System.err.println("No table annotation");
+            map.setTableName(clazz.getSimpleName().toLowerCase());
+        }
         List<Field> listFields = new ArrayList<>();
         listFields.addAll(Arrays.asList(clazz.getSuperclass().getDeclaredFields()));
         listFields.addAll(Arrays.asList(clazz.getDeclaredFields()));
         for(Field field : listFields){
-            if (isSupported(field)) {
+            if (isNotSupported(field)) {
                 continue;
             }
-            map.addField(field.getName());
+            map.addField(field);
         }
         return map;
     }
-    private static boolean isSupported(Field field){
+    private static boolean isNotSupported(Field field){
+
         return (field.getDeclaredAnnotation(Column.class) == null)
                 || ((!field.getType().isPrimitive() && (field.getType() != String.class)) && (!mapWrappers.values().contains(field.getDeclaringClass())));
     }

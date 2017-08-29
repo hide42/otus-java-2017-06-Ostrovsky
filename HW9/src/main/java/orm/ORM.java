@@ -22,28 +22,22 @@ public class ORM {
 
     public <T> T select(Class<T> clazz,int id) throws SQLException {
         return executor.execQuery(QueryHelper.getSelect(clazz,id),resultSet -> {
-
-            AtomicReference<T> instance = null;
-            try {
-                instance = new AtomicReference<>(clazz.newInstance());
-            } catch (InstantiationException | IllegalAccessException e) {
-                e.printStackTrace();
-            }
-            if (instance.get() == null) {
-                return null;
-            }
+            T instance = null;
             try {
                 if (resultSet.next()) {
+                    instance = clazz.newInstance();
                     MapORM entityMapping = QueryHelper.getMappingORM(clazz);
-                    for (String field : entityMapping.getFields()) {
-                        setFieldValue(instance.get(), field, resultSet.getObject(field));
+                    for (Field field : entityMapping.getFields()) {
+                        setFieldValue(instance, field.getName(), resultSet.getObject(field.getName()));
                     }
                 }
-                return instance.get();
+                return instance;
             } catch (SQLException e) {
                 return null;
+            } catch (InstantiationException | IllegalAccessException e) {
+                e.printStackTrace();
+                return null;
             }
-
         });
     }
 
