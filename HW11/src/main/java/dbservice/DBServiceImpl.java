@@ -54,7 +54,7 @@ public class DBServiceImpl implements DBService {
     }
 
     public void save(User dataSet) {
-        executor.save(dataSet);
+        cacheEngine.put(executor.save(dataSet),dataSet);
     }
 
     public User read(long id) {

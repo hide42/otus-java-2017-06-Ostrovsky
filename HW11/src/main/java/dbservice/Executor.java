@@ -19,10 +19,10 @@ public class Executor {
         return runInSession(session -> session.getTransaction().getStatus().name());
     }
 
-    public void save(User dataSet) {
+    public long save(User dataSet) {
         try (Session session = sessionFactory.openSession()) {
             UserDataSetDAO dao = new UserDataSetDAO(session);
-            dao.save(dataSet);
+            return dao.save(dataSet);
         }
     }
 

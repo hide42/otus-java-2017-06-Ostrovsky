@@ -10,8 +10,8 @@ public class UserDataSetDAO {
         this.session = session;
     }
 
-    public void save(User dataSet) {
-        session.save(dataSet);
+    public long save(User dataSet) {
+        return (long)session.save(dataSet);
     }
 
     public User read(long id) {
